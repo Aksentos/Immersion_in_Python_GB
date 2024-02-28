@@ -37,7 +37,7 @@ else:
 num = int(input("Введите число: "))  # эту строчку в автотест передавать не надо!
 
 # 1 варинат через функцию
-def is_simple(number: int):
+def is_simple(number: int) -> str:
     if 1 < number < 100_001:
         for i in range(2, int(number**0.5) + 1):
             if number % i == 0:
