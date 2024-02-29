@@ -79,3 +79,7 @@ for i in list1:
     if i in list2:
         counter += 1
 print("Количество совпадающих чисел:", counter)
+
+# 3 вариант list comrehension (от Шамиля)
+result = [i for i in list1 if i in list2]  # список с одинаоквыми элементами 
+print(f'Количество совпадающих чисел:{len(result)}')
