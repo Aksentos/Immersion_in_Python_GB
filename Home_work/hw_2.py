@@ -6,10 +6,10 @@
 '''
 
 HEX = 16
-number = int(input('Введите целое число'))
+num = int(input('Введите целое число'))
 
 def num_to_base(orig_number: int, base: int):
-    h = '0123456789abcdef'
+    h = '0123456789ABCDEF'
     result = ""
     while orig_number != 0:
         remains = orig_number % base
@@ -19,8 +19,8 @@ def num_to_base(orig_number: int, base: int):
         orig_number //= base
     return result
 
-print(f'Число {number} в шестнадцатеричной системе: {num_to_base(number, HEX)}')
-print(f'Проверка: {hex(number)}')
+print(f'Шестнадцатеричное представление числа: {num_to_base(num, HEX)}')
+print(f'Проверка результата: {hex(num)}')
 
 """
 Напишите программу, которая принимает две строки
