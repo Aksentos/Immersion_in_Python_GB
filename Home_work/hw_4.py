@@ -48,6 +48,11 @@ def transpose(matrix):
 def transpose(matrix):
     return list(map(list, zip(*matrix)))
 
+# var 5
+def transpose(matrix):
+    return [[matrix[j][i] for j in range(len(matrix))] for i in range(len(matrix[0]))]
+
+
 """Преобразование ключей и значений словаря
 Напишите функцию key_params, принимающую на вход только ключевые параметры и
 возвращающую словарь, где ключ - значение переданного аргумента, а значение -
