@@ -46,7 +46,7 @@ def transpose(matrix):
 
 # var 4
 def transpose(matrix):
-    return list(zip(*matrix))
+    return list(map(list, zip(*matrix)))
 
 """Преобразование ключей и значений словаря
 Напишите функцию key_params, принимающую на вход только ключевые параметры и
