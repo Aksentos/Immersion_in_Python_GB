@@ -92,3 +92,44 @@ def write_name_number(data: tuple[list[str], list[float]]):
 
 
 write_name_number(result)
+
+"""Задание №4
+✔ Создайте функцию, которая создаёт файлы с указанным расширением.
+Функция принимает следующие параметры:
+    ✔ расширение
+    ✔ минимальная длина случайно сгенерированного имени, по умолчанию 6
+    ✔ максимальная длина случайно сгенерированного имени, по умолчанию 30
+    ✔ минимальное число случайных байт, записанных в файл, по умолчанию 256
+    ✔ максимальное число случайных байт, записанных в файл, по умолчанию 4096
+    ✔ количество файлов, по умолчанию 42
+✔ Имя файла и его размер должны быть в рамках переданного диапазона."""
+
+import string
+import random
+
+
+def add_file(
+    expansion,
+    MIN_NAME_LENGHT=6,
+    MAX_NAME_LENGHT=30,
+    MIN_BITES=256,
+    MAX_BITES=4096,
+    FILES_QUANTITY=42,
+):
+
+    for _ in range(FILES_QUANTITY):
+        name = "".join(
+            random.choices(
+                string.ascii_lowercase + string.digits,
+                k=random.randint(MIN_NAME_LENGHT, MAX_NAME_LENGHT),
+            )
+        )
+
+        data = bytes(
+            random.randint(0, 255) for _ in range(random.randint(MIN_BITES, MAX_BITES))
+        )
+        with open(f"{name}.{expansion}", "wb") as f:
+            f.write(data)
+
+
+add_file("txt", FILES_QUANTITY=5)
