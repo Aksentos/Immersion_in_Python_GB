@@ -128,8 +128,86 @@ def add_file(
         data = bytes(
             random.randint(0, 255) for _ in range(random.randint(MIN_BITES, MAX_BITES))
         )
-        with open(f"{name}.{expansion}", "wb") as f:
-            f.write(data)
+        if f'{name}.{expansion}' not in os.listdir():
+            with open(f"{name}.{expansion}", "wb") as f:
+                f.write(data)
 
 
 add_file("txt", FILES_QUANTITY=5)
+
+"""Задание №5
+✔ Доработаем предыдущую задачу.
+✔ Создайте новую функцию которая генерирует файлы с разными расширениями.
+✔ Расширения и количество файлов функция принимает в качестве параметров.
+✔ Количество переданных расширений может быть любым.
+✔ Количество файлов для каждого расширения различно.
+✔ Внутри используйте вызов функции из прошлой задачи.
+"""
+
+expansions = ["txt", "jpeg", "bin", "avi", "mp3"]
+
+
+def add_files(*args, quantity=1):
+    if quantity == 1:
+        for exp in args:
+            add_file(exp, FILES_QUANTITY=1)
+    else:
+        for exp in args:
+            add_file(exp, FILES_QUANTITY=random.randint(1, quantity))
+
+
+"""Задание №6
+✔ Дорабатываем функции из предыдущих задач.
+✔ Генерируйте файлы в указанную директорию — отдельный параметр функции.
+✔ Отсутствие/наличие директории не должно вызывать ошибок в работе функции
+(добавьте проверки).
+✔ Существующие файлы не должны удаляться/изменяться в случае совпадения имён."""
+
+import os
+
+
+def add_file_to_dir(dir):
+    if dir not in os.listdir():
+        os.mkdir(dir)
+    os.chdir(dir)
+    add_files(*expansions, quantity=2)
+
+
+add_file_to_dir('new_dir')
+
+
+"""Задание №7
+✔ Создайте функцию для сортировки файлов по директориям: видео, изображения, текст и т.п.
+✔ Каждая группа включает файлы с несколькими расширениями.
+✔ В исходной папке должны остаться только те файлы, которые не подошли для сортировки."""
+
+from pathlib import Path
+
+
+def folders():
+    try:
+        Path("video").mkdir()
+        Path("foto").mkdir()
+        Path("bins").mkdir()
+        Path("text").mkdir()
+    except:
+        print("Папки уже существуют")
+
+
+def send_files_to_dir():
+    for obj in Path(Path().cwd()).iterdir():
+        if obj.is_file():
+            file = str(obj).rsplit("\\", maxsplit=1)[-1]
+            if file.endswith(("txt", "doc", "docx")):
+                Path(file).replace(Path.cwd() / "text" / file)
+            elif file.endswith(("avi", "mp4", "mkv")):
+                Path(file).replace(Path.cwd() / "video" / file)
+            elif file.endswith("jpeg"):
+                Path(file).replace(Path.cwd() / "foto" / file)
+            elif file.endswith("bin"):
+                Path(file).replace(Path.cwd() / "bins" / file)
+
+
+folders()
+add_files(*expansions, quantity=3)
+send_files_to_dir()
