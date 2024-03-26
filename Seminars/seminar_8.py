@@ -9,17 +9,6 @@
 
 import json
 
-# var 1
-with (
-    open("result.txt", "r", encoding="utf-8") as f,
-    open("new_result.json", "a", encoding="utf-8") as new,
-):
-    data = f.readlines()
-    data = {row.strip().split()[0]: row.strip().split()[1] for row in data}
-    json.dump(data, new, indent=3, ensure_ascii=False)
-
-
-# var 2
 def create_json(in_file, out_file):
     with open(in_file, "r", encoding="UTF-8") as input_file:
         data = input_file.readlines()
