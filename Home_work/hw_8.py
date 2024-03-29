@@ -37,18 +37,103 @@ save_results_to_json, save_results_to_csv и save_results_to_pickle.
 виде словаря {'Path': path, 'Type': 'Directory', 'Size': size}.
 """
 
+
 import os
+import csv
+import json
+import pickle
 
+# var 1 (автотест не принимает, но все работает)
 
-def dir_tree(dir: str):
-    for dir_path, dir_name, file_name in os.walk(dir):
-        print(f"{dir_path = }\n{dir_name = }\n{file_name = }\n")
+def traverse_directory(directory: str):
+    result = []
+    for dir_path, _, file_name in os.walk(directory):
+        size_dir = get_folder_size(dir_path)  # Размер папки в байтах
+        abs_dir_path = os.path.abspath(dir_path)  # Абсолютный путь до папки
+        # print(f'Родительская директория {Path(dir_path).parent.absolute()}\n')
+
         for file in file_name:
-            path = os.path.join(os.getcwd(), str(dir_path).rsplit('/', maxsplit=1)[-1], file)
-            size_file = os.path.getsize(path)
-            print(f"size {file} = {size_file}")
-        size_dir = os.path.getsize(str(dir_path)+'/')
-        print(f"{size_dir = }")
+            abs_file_path = os.path.abspath(
+                os.path.join(dir_path, file)
+            )  # Абсолютный путь до файла
+            size_file = os.path.getsize(abs_file_path)  # Размер файла в байтах
+            result.append({"Path": abs_file_path, "Type": "File", "Size": size_file})
+
+        result.append({"Path": abs_dir_path, "Type": "Directory", "Size": size_dir})
+    return result
 
 
-dir_tree("C:/Users/bruno/OneDrive/Рабочий стол/Ses/")
+# Функция расчета размера директории в байтах
+def get_folder_size(folder: str) -> int:
+    folder_size = 0
+    for dir_path, _, file_names in os.walk(folder):
+        for file in file_names:
+            folder_size += os.path.getsize(os.path.join(dir_path, file))
+    return folder_size
+
+
+def save_results_to_json(res_list: list[dict], name: str):
+    with open(name, "w", encoding="utf-8") as js:
+        json.dump(res_list, js, ensure_ascii=False, indent=4)
+
+
+def save_results_to_csv(res_list: list[dict], name: str):
+    with open(name, "w", encoding="utf-8") as cs:
+        csv_write = csv.DictWriter(
+            cs,
+            fieldnames=["Path", "Type", "Size"],
+            dialect="excel-tab",
+            quoting=csv.QUOTE_NONNUMERIC,
+        )
+        csv_write.writeheader()
+
+        for result in res_list:
+            csv_write.writerow(result)
+
+
+def save_results_to_pickle(res_list: list[dict], name: str):
+    with open(name, "wb") as pcl:
+        pickle.dump(res_list, pcl)
+
+
+
+# var 2 GB
+def get_dir_size(directory):
+    total_size = 0
+
+    for root, dirs, files in os.walk(directory):
+        for name in files:
+            path = os.path.join(root, name)
+            total_size += os.path.getsize(path)
+
+    return total_size
+
+def traverse_directory(directory):
+    results = []
+
+    for root, dirs, files in os.walk(directory):
+        for name in files:
+            path = os.path.join(root, name)
+            size = os.path.getsize(path)
+            results.append({'Path': path, 'Type': 'File', 'Size': size})
+
+        for name in dirs:
+            path = os.path.join(root, name)
+            size = get_dir_size(path)
+            results.append({'Path': path, 'Type': 'Directory', 'Size': size})
+
+    return results
+
+def save_results_to_json(results, file_path):
+    with open(file_path, 'w') as file:
+        json.dump(results, file)
+
+def save_results_to_csv(results, file_path):
+    with open(file_path, 'w', newline='') as file:
+        writer = csv.DictWriter(file, fieldnames=['Path', 'Type', 'Size'])
+        writer.writeheader()
+        writer.writerows(results)
+
+def save_results_to_pickle(results, file_path):
+    with open(file_path, 'wb') as file:
+        pickle.dump(results, file)
