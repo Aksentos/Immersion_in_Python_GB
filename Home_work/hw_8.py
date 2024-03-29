@@ -137,3 +137,19 @@ def save_results_to_csv(results, file_path):
 def save_results_to_pickle(results, file_path):
     with open(file_path, 'wb') as file:
         pickle.dump(results, file)
+
+'''Пакет для работы с файлами 2
+Из созданных на уроке и в рамках домашнего задания функций, соберите пакет для работы с файлами.
+'''
+
+name_list = [
+    "def get_dir_size",
+    "def save_results_to_json",
+    "def save_results_to_csv",
+    "def save_results_to_pickle",
+    "def traverse_directory",
+]
+
+with open("__init__.py", "w", encoding="utf-8") as f:
+    for name in name_list:
+        f.write(f"{name}\n")
