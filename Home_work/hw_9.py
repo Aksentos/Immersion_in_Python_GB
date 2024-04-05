@@ -62,7 +62,7 @@ def find_roots(a: int, b: int, c: int):
         x2 = (-b - d**0.5) / (2 * a)
         return x1, x2
     elif not d:
-        return -b / 2 * a
+        return -b / (2 * a)
     return None
 
 
