@@ -88,37 +88,37 @@ class Rectangle:
         return f"Rectangle({self.width}, {self.height})"
 
 
-# test 1
-r = Rectangle(-2)
-"""
-Ожидаемый ответ:
-__main__.NegativeValueError: Ширина должна быть положительной, а не -2
-"""
+# # test 1
+# r = Rectangle(-2)
+# """
+# Ожидаемый ответ:
+# __main__.NegativeValueError: Ширина должна быть положительной, а не -2
+# """
 
-# test 2
-r = Rectangle(5, -3)
-"""
-Ожидаемый ответ:
-__main__.NegativeValueError: Высота должна быть положительной, а не -3
-"""
+# # test 2
+# r = Rectangle(5, -3)
+# """
+# Ожидаемый ответ:
+# __main__.NegativeValueError: Высота должна быть положительной, а не -3
+# """
 
-# test 3
-r = Rectangle(4, 4)
-r.width = -3
+# # test 3
+# r = Rectangle(4, 4)
+# r.width = -3
 
-"""
-Ожидаемый ответ:
-__main__.NegativeValueError: Ширина должна быть положительной, а не -3
-"""
+# """
+# Ожидаемый ответ:
+# __main__.NegativeValueError: Ширина должна быть положительной, а не -3
+# """
 
-# test 4
-r = Rectangle(4, 4)
-r.height = -3
+# # test 4
+# r = Rectangle(4, 4)
+# r.height = -3
 
-"""
-Ожидаемый ответ:
-__main__.NegativeValueError: Высота должна быть положительной, а не -3
-"""
+# """
+# Ожидаемый ответ:
+# __main__.NegativeValueError: Высота должна быть положительной, а не -3
+# """
 
 '''Обработка исключений в Archive
 Допишите в вашу задачу Archive обработку исключений.
@@ -189,26 +189,135 @@ class InvalidNumberError(Exception):
         return f"Invalid number: {self.value}. Number should be a positive integer or float."
 
 
-# test 1
-archive_instance = Archive("Sample text", 42.5)
-print(archive_instance)
-'''Ожидаемый ответ:
-Text is Sample text and number is 42.5. Also [] and []
-'''
+# # test 1
+# archive_instance = Archive("Sample text", 42.5)
+# print(archive_instance)
+# '''Ожидаемый ответ:
+# Text is Sample text and number is 42.5. Also [] and []
+# '''
 
-# test 2
-invalid_archive_instance = Archive("", -5)
-print(invalid_archive_instance)
-'''Ожидаемый ответ:
-InvalidTextError: Invalid text: . Text should be a non-empty string.
-'''
+# # test 2
+# invalid_archive_instance = Archive("", -5)
+# print(invalid_archive_instance)
+# '''Ожидаемый ответ:
+# InvalidTextError: Invalid text: . Text should be a non-empty string.
+# '''
 
-# test 3
-invalid_archive_instance = Archive("Sample text", -5)
-print(invalid_archive_instance)
-'''Ожидаемый ответ:
-__main__.InvalidNumberError: Invalid number: -5. Number should be a positive integer or float.
+# # test 3
+# invalid_archive_instance = Archive("Sample text", -5)
+# print(invalid_archive_instance)
+# '''Ожидаемый ответ:
+# __main__.InvalidNumberError: Invalid number: -5. Number should be a positive integer or float.
+# '''
 
-'''
 
+"""Управление информацией о сотрудниках и их возрасте
+В организации есть два типа людей: сотрудники и обычные люди. Каждый человек (и сотрудник, и обычный)
+имеет следующие атрибуты:
+Фамилия (строка, не пустая) Имя (строка, не пустая) Отчество (строка, не пустая) 
+Возраст (целое положительное число) Сотрудники имеют также уникальный идентификационный номер (ID), 
+который должен быть шестизначным положительным целым числом.
+
+Добавить метод birthday в класс Person, который будет увеличивать возраст человека на 1 год.
+Добавить метод get_level в класс Employee, который будет возвращать уровень сотрудника на основе 
+суммы цифр в его ID (по остатку от деления на 7).
+"""
+
+class InvalidNameError(Exception):
+    def __init__(self, value) -> None:
+        self.value = value
+
+    def __str__(self) -> str:
+        return f"Invalid name: {self.value}. Name should be a non-empty string."
+
+
+class InvalidAgeError(Exception):
+    def __init__(self, value) -> None:
+        self.value = value
+
+    def __str__(self) -> str:
+        return f"Invalid age: {self.value}. Age should be a positive integer."
+
+
+class InvalidIdError(Exception):
+    def __init__(self, value) -> None:
+        self.value = value
+
+    def __str__(self) -> str:
+        return f"Invalid id: {self.value}. Id should be a 6-digit positive integer between 100000 and 999999."
+
+
+class Person:
+    def __init__(self, last_name, name, patronymic, age) -> None:
+        if not last_name or not isinstance(last_name, str):
+            raise InvalidNameError(last_name)
+        if not name or not isinstance(name, str):
+            raise InvalidNameError(name)
+        if not patronymic or not isinstance(patronymic, str):
+            raise InvalidNameError(patronymic)
+        if not age or not isinstance(age, int) or age <= 0:
+            raise InvalidAgeError(age)
+
+        self.last_name = last_name
+        self.name = name
+        self.patronymic = patronymic
+        self._age = age
+
+    def birthday(self):
+        self._age += 1
+
+    def get_age(self):
+        return self._age
+
+    def __repr__(self) -> str:
+        return f"{self.name} = Person{self.last_name, self.name, self.patronymic, self._age}"
+
+
+class Employee(Person):
+    def __init__(self, last_name, name, patronymic, age, emp_id) -> None:
+        super().__init__(last_name, name, patronymic, age)
+        if (
+            not emp_id
+            or not isinstance(emp_id, int)
+            or len(str(emp_id)) != 6
+            or emp_id < 0
+        ):
+            raise InvalidIdError(emp_id)
+        self.emp_id = emp_id
+
+    def __repr__(self) -> str:
+        return f"{self.name} = Person{self.last_name, self.name, self.patronymic, self.age, self.emp_id}"
+
+    def get_lvl(self):
+        return sum(map(int, str(self.emp_id))) % 7
+
+
+# # test 1
+# person = Person("", "John", "Doe", 30)
+# '''
+# Ожидаемый ответ:
+# __main__.InvalidNameError: Invalid name: . Name should be a non-empty string.
+# '''
+
+# # test 2
+# person = Person("Alice", "Smith", "Johnson", -5)
+# '''
+# Ожидаемый ответ:
+# __main__.InvalidAgeError: Invalid age: -5. Age should be a positive integer.
+# '''
+
+# # test 3
+# employee = Employee("Bob", "Johnson", "Brown", 40, 12345)
+# """
+# Ожидаемый ответ:
+# __main__.InvalidIdError: Invalid id: 12345. Id should be a 6-digit positive integer between 100000 and 999999.
+# """
+
+# # test 4
+# person = Person("Alice", "Smith", "Johnson", 25)
+# print(person.get_age())
+# """
+# Ожидаемый ответ:
+# 25
+# """
 
