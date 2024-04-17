@@ -11,8 +11,6 @@ class NegativeValueError(Exception):
 
 
 class Rectangle:
-    """ """
-
     def __init__(self, width, height=None):
         """
         >>> r1 = Rectangle(5)
@@ -44,7 +42,6 @@ class Rectangle:
         >>> r2.perimeter()
         14
         """
-
         return 2 * (self.width + self.height)
 
     def area(self):
@@ -91,28 +88,41 @@ class Rectangle:
         return Rectangle(width, height)
 
     def __lt__(self, other):
-
         return self.area() < other.area()
 
     def __eq__(self, other):
-
         return self.area() == other.area()
 
     def __le__(self, other):
-
         return self.area() <= other.area()
 
     def __str__(self):
-
         return f"Прямоугольник со сторонами {self.width} и {self.height}"
 
     def __repr__(self):
-
         return f"Rectangle({self.width}, {self.height})"
-
-
 # # в тест ГБ ставлять не нужно:
 # if __name__ == "__main__":
 #     import doctest
-
 #     doctest.testmod(verbose=True)
+
+
+'''
+Rectangle тесты unittest
+'''
+
+class TestRectangle(unittest.TestCase):
+    def test_width(self):
+        self.assertEqual(Rectangle(5).width, 5)
+
+    def test_height(self):
+        self.assertEqual(Rectangle(3, 4).height, 4)
+
+    def test_perimeter(self):
+        self.assertEqual(Rectangle(5).perimeter(), 20)
+
+    def test_area(self):
+        self.assertEqual(Rectangle(3, 4).area(), 12)
+
+    def test_addition(self):
+        self.assertEqual(Rectangle(5) + Rectangle(3, 4), Rectangle(8, 6.0))
