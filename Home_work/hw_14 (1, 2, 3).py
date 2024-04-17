@@ -110,19 +110,22 @@ class Rectangle:
 '''
 Rectangle тесты unittest
 '''
-
 class TestRectangle(unittest.TestCase):
+    def setUp(self) -> None:
+        self.r1 = Rectangle(5)
+        self.r2 = Rectangle(3, 4)
+
     def test_width(self):
-        self.assertEqual(Rectangle(5).width, 5)
+        self.assertEqual(self.r1.width, 5)
 
     def test_height(self):
-        self.assertEqual(Rectangle(3, 4).height, 4)
+        self.assertEqual(self.r2.height, 4)
 
     def test_perimeter(self):
-        self.assertEqual(Rectangle(5).perimeter(), 20)
+        self.assertEqual(self.r1.perimeter(), 20)
 
     def test_area(self):
-        self.assertEqual(Rectangle(3, 4).area(), 12)
+        self.assertEqual(self.r2.area(), 12)
 
     def test_addition(self):
-        self.assertEqual(Rectangle(5) + Rectangle(3, 4), Rectangle(8, 6.0))
+        self.assertEqual(self.r1 + self.r2, Rectangle(8, 6.0))
